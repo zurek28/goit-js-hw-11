@@ -1,0 +1,51 @@
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 30px auto 0;
+
+  &__figure {
+    margin: 0;
+    flex-basis: calc((100% - 80px) / 4);
+    background-color: rgba(63, 63, 63, 0.4);
+    border-radius: 5px;
+  }
+
+  // &__item {
+
+  // }
+
+  &__image {
+    width: 100%;
+    height: 196px;
+  }
+
+  &__infoList {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    list-style: none;
+    padding: 0;
+  }
+
+  &__infoList > li {
+    text-align: center;
+    margin: 0 5px;
+  }
+
+  &__infoList h5 {
+    margin: 0;
+  }
+
+  &__infoList p {
+    margin: 5px 0;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+// .morebutton {
+// }
