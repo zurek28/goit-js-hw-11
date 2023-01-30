@@ -2,16 +2,22 @@
 import axios from 'axios';
 import { Notify } from 'notiflix';
 import { galleryGenerator } from './js/gallery';
-import { searchInput, queryLink } from './js/searching';
+import { searchInput, searchParameters, queryLink } from './js/searching';
 
 window.onload = () => {
   const searchButton = document.querySelector('.search-form__button');
   const galleryContainer = document.querySelector('.gallery');
   const loadMoreButton = document.querySelector('.morebutton');
 
+  let i = 1;
+  let pageQuantity = 0;
+
   searchButton.addEventListener('click', e => {
     e.preventDefault();
     galleryContainer.innerHTML = '';
+    loadMoreButton.classList.add('hidden');
+
+    i = 1;
 
     getPhotos(`${queryLink}&q=${searchInput.value}`)
       .then(response => {
@@ -24,9 +30,15 @@ window.onload = () => {
         } else {
           Notify.success(`Hooray! We found ${response.data.total} images.`);
         }
+
+        return response;
       })
-      .then(() => {
-        classAdd();
+      .then(response => {
+        // console.log(response.data);
+        pageQuantity = response.data.totalHits / searchParameters['per_page'];
+        if (Math.ceil(pageQuantity) > 1) {
+          showButton();
+        }
       });
   });
 
@@ -35,7 +47,6 @@ window.onload = () => {
     return response;
   };
 
-  let i = 1;
   loadMoreButton.addEventListener('click', e => {
     e.preventDefault();
 
@@ -46,13 +57,21 @@ window.onload = () => {
     getPhotos(`${queryLink}&q=${searchInput.value}&page=${i}`)
       .then(response => {
         galleryGenerator(response.data.hits);
+        return response;
       })
       .then(() => {
-        classAdd();
+        if (Math.ceil(pageQuantity) > i) {
+          showButton();
+        } else {
+          loadMoreButton.classList.add('hidden');
+          Notify.warning(
+            `We're sorry, but you've reached the end of search results.`
+          );
+        }
       });
   });
 
-  function classAdd() {
+  function showButton() {
     loadMoreButton.classList.remove('hidden');
   }
 };
