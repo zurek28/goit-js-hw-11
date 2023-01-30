@@ -58,3 +58,43 @@
     }
   }
 }
+
+.morebutton-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.morebutton {
+  background: rgba(255, 255, 255, 0.082);
+  width: 300px;
+  padding: 1em;
+  border: none;
+  border-radius: 5000px;
+  backdrop-filter: blur(5px);
+  box-shadow: 4px 4px 60px rgba(0, 0, 0, 0.2);
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  width: 120px;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  align-items: center;
+  margin: 20px auto 30px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 4px 60px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+
+  &:focus {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 4px 60px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}

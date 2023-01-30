@@ -1,7 +1,8 @@
 'use strict';
 import axios from 'axios';
+import { Notify } from 'notiflix';
 import { galleryGenerator } from './js/gallery';
-import { searchInput, searchParameters, queryLink } from './js/searching';
+import { searchInput, queryLink } from './js/searching';
 
 window.onload = () => {
   const searchButton = document.querySelector('.search-form__button');
@@ -12,12 +13,21 @@ window.onload = () => {
     e.preventDefault();
     galleryContainer.innerHTML = '';
 
-    getPhotos(`${queryLink}&q=${searchInput.value}`).then(response => {
-      galleryGenerator(response.data.hits);
-      setTimeout(function classAdd() {
-        loadMoreButton.classList.remove('hidden');
-      }, 1000);
-    });
+    getPhotos(`${queryLink}&q=${searchInput.value}`)
+      .then(response => {
+        galleryGenerator(response.data.hits);
+
+        if (response.data.total < 1) {
+          Notify.failure(
+            'Sorry, there are no images matching your search query. Please try again.'
+          );
+        } else {
+          Notify.success(`Hooray! We found ${response.data.total} images.`);
+        }
+      })
+      .then(() => {
+        classAdd();
+      });
   });
 
   const getPhotos = async url => {
@@ -29,14 +39,20 @@ window.onload = () => {
   loadMoreButton.addEventListener('click', e => {
     e.preventDefault();
 
+    loadMoreButton.classList.add('hidden');
+
     i += 1;
 
-    getPhotos(`${queryLink}&q=${searchInput.value}&page=${i}`).then(
-      response => {
+    getPhotos(`${queryLink}&q=${searchInput.value}&page=${i}`)
+      .then(response => {
         galleryGenerator(response.data.hits);
-      }
-    );
+      })
+      .then(() => {
+        classAdd();
+      });
   });
 
-  function nextPage(pageNumber) {}
+  function classAdd() {
+    loadMoreButton.classList.remove('hidden');
+  }
 };
